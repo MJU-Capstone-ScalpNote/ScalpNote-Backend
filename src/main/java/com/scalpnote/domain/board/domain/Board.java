@@ -1,0 +1,45 @@
+package com.scalpnote.domain.board.domain;
+
+import com.scalpnote.domain.common.BaseEntity;
+import com.scalpnote.domain.user.domain.User;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
+
+@Entity
+@Table(name = "Board")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Where(clause = "status = 'ACTIVE'")
+public class Board extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "writer_id")
+    private User writer;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+
+    @Builder
+    public Board(User writer, String title, String content, String imageUrl) {
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+    }
+}
