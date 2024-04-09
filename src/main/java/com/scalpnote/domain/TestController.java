@@ -9,6 +9,6 @@ public class TestController {
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
-        return ResponseEntity.ok("Hello!");
+        return ResponseEntity.ok("Hello!!");
     }
 }
