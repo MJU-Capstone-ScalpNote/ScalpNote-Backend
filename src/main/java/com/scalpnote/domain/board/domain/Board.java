@@ -22,7 +22,7 @@ public class Board extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "writer_id")
+    @JoinColumn(name = "writer_id")
     private User writer;
 
     @Column(name = "title")
