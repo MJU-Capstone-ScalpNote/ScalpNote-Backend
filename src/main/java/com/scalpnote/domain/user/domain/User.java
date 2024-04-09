@@ -1,5 +1,6 @@
-package com.scalpnote.domain.user;
+package com.scalpnote.domain.user.domain;
 
+import com.scalpnote.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Where(clause = "status = 'ACTIVE'")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +26,23 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "hairLossType")
+    private String hairLossType;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "role", nullable = false)
-//    private Role role;
+    @Column(name = "scalpCondition")
+    private String scalpCondition;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Builder
-    public User(String email, String name) {
+    public User(String email, String name, String hairLossType, String scalpCondition, Role role) {
         this.email = email;
         this.name = name;
+        this.hairLossType = hairLossType;
+        this.scalpCondition = scalpCondition;
+        this.role = role;
     }
 }
