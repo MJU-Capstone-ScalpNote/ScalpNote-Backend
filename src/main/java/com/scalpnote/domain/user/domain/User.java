@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "User")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "Member")
+@NoArgsConstructor
 @Getter
-@Where(clause = "status = 'ACTIVE'")
 public class User extends BaseEntity {
 
     @Id
@@ -22,6 +21,9 @@ public class User extends BaseEntity {
 
     @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
+
+    @Column(name = "password", nullable = false, unique = true, updatable = false)
+    private String password;
 
     @Column(name = "name")
     private String name;
@@ -38,8 +40,9 @@ public class User extends BaseEntity {
     private Role role;
 
     @Builder
-    public User(String email, String name, String hairLossType, String scalpCondition, Role role) {
+    public User(String email, String password, String name, String hairLossType, String scalpCondition, Role role) {
         this.email = email;
+        this.password = password;
         this.name = name;
         this.hairLossType = hairLossType;
         this.scalpCondition = scalpCondition;
