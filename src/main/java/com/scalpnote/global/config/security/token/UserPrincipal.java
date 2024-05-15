@@ -52,20 +52,18 @@ public class UserPrincipal implements UserDetails {
         return email;
     }
 
-//    @Override
-//    public Map<String, Object> getAttributes() {
-//        return attributes;
-//    }
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
-//    @Override
-//    public String getName() {
-//        return String.valueOf(id);
-//    }
+    public String getName() {
+        return email;
+    }
 
     @Override
     public String getPassword() {

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,14 +60,17 @@ public class AuthService {
         User findUser = user.get();
 
 
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        signInReq.getEmail(),
-//                        signInReq.getPassword()
-//                )
-//        );
-//
-//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signInReq.getEmail(),
+                        signInReq.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
         Date now = new Date();
 
         Date accessTokenExpiresIn = new Date(now.getTime() + 300000000);
@@ -75,7 +79,7 @@ public class AuthService {
                 .setSubject(Long.toString(findUser.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(accessTokenExpiresIn)
-                .signWith(SignatureAlgorithm.HS512, key)
+                .signWith(SignatureAlgorithm.HS512, key.getBytes())
                 .compact();
 
         AuthRes authRes = AuthRes.builder()
