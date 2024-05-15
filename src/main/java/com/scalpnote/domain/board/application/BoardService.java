@@ -52,9 +52,9 @@ public class BoardService {
     @Transactional
     public Message editPost(Long postId, UserPrincipal userPrincipal, EditPostReq editPostReq) {
 
-        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(RuntimeException::new);
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(NullPointerException::new);
 
-        Board board = boardRepository.findById(postId).orElseThrow(RuntimeException::new);
+        Board board = boardRepository.findById(postId).orElseThrow(NullPointerException::new);
 
         if (!board.getWriter().equals(user)) {
             return Message.builder()
@@ -68,6 +68,26 @@ public class BoardService {
 
         return Message.builder()
                 .message("게시물 수정이 완료되었습니다.")
+                .build();
+    }
+
+    @Transactional
+    public Message deletePost(Long postId, UserPrincipal userPrincipal) {
+
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(NullPointerException::new);
+
+        Board board = boardRepository.findById(postId).orElseThrow(NullPointerException::new);
+
+        if (!board.getWriter().equals(user)) {
+            return Message.builder()
+                    .message("게시글 삭제에 실패했습니다.")
+                    .build();
+        }
+
+        boardRepository.delete(board);
+
+        return Message.builder()
+                .message("게시글 삭제를 완료했습니다.")
                 .build();
     }
 }
