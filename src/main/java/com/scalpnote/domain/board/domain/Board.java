@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Board")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,21 +27,21 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "writer_id")
     private User writer;
 
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+//    @Column(name = "image_url")
+//    private String imageUrl;
 
 
     @Builder
-    public Board(User writer, String title, String content, String imageUrl) {
+    public Board(User writer, String title, String content) {
         this.writer = writer;
         this.title = title;
         this.content = content;
-        this.imageUrl = imageUrl;
     }
 }
