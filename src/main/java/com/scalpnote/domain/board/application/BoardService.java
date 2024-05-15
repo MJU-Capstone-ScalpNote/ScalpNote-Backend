@@ -3,6 +3,7 @@ package com.scalpnote.domain.board.application;
 import com.scalpnote.domain.board.domain.Board;
 import com.scalpnote.domain.board.domain.repository.BoardRepository;
 import com.scalpnote.domain.board.dto.CreatePostReq;
+import com.scalpnote.domain.board.dto.EditPostReq;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.global.DefaultAssert;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -46,6 +46,28 @@ public class BoardService {
 
         return Message.builder()
                 .message("게시물이 작성되었습니다.")
+                .build();
+    }
+
+    @Transactional
+    public Message editPost(Long postId, UserPrincipal userPrincipal, EditPostReq editPostReq) {
+
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(RuntimeException::new);
+
+        Board board = boardRepository.findById(postId).orElseThrow(RuntimeException::new);
+
+        if (!board.getWriter().equals(user)) {
+            return Message.builder()
+                    .message("해당 게시글의 수정 권한이 없습니다.")
+                    .build();
+        }
+
+
+        board.updatePost(editPostReq.getTitle(), editPostReq.getContent());
+
+
+        return Message.builder()
+                .message("게시물 수정이 완료되었습니다.")
                 .build();
     }
 }
