@@ -1,6 +1,7 @@
 package com.scalpnote.domain.board.presentation;
 
 import com.scalpnote.domain.board.application.BoardService;
+import com.scalpnote.domain.board.dto.BoardRes;
 import com.scalpnote.domain.board.dto.CreatePostReq;
 import com.scalpnote.domain.board.dto.EditPostReq;
 import com.scalpnote.domain.board.dto.FindPostRes;
@@ -18,7 +19,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
 
 @Tag(name = "Board", description = "Board API")
 @RestController
@@ -93,6 +97,16 @@ public class BoardController {
 //            throw new RuntimeException("UserPrincipal is null");
 //        }
         return ResponseCustom.OK(boardService.findPost(postId));
+    }
+
+    @Operation(summary = "게시글 목록 조회", description = "커뮤니티 게시글 목록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 목록 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FindPostRes.class))}),
+            @ApiResponse(responseCode = "400", description = "게시글 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
+    @GetMapping
+    public ResponseCustom<Page<FindPostRes>> findAllPosts(Pageable pageable) {
+        return ResponseCustom.OK(boardService.findAllPosts(pageable));
     }
 
 
