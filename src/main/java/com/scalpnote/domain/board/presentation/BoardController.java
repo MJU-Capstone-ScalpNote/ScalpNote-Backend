@@ -3,6 +3,7 @@ package com.scalpnote.domain.board.presentation;
 import com.scalpnote.domain.board.application.BoardService;
 import com.scalpnote.domain.board.dto.CreatePostReq;
 import com.scalpnote.domain.board.dto.EditPostReq;
+import com.scalpnote.domain.board.dto.FindPostRes;
 import com.scalpnote.global.config.security.token.CurrentUser;
 import com.scalpnote.global.config.security.token.UserPrincipal;
 import com.scalpnote.global.payload.ErrorResponse;
@@ -75,6 +76,23 @@ public class BoardController {
             throw new RuntimeException("UserPrincipal is null");
         }
         return ResponseCustom.OK(boardService.deletePost(postId, userPrincipal));
+    }
+
+    @Operation(summary = "게시글 개별 조회", description = "커뮤니티 게시글을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FindPostRes.class))}),
+            @ApiResponse(responseCode = "400", description = "게시글 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
+    @GetMapping("/{postId}/simple-boards")
+    public ResponseCustom<FindPostRes> findPost(
+//            @Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+            @Parameter(description = "게시물의 id를 입력해주세요.") @PathVariable Long postId
+    ) {
+        // Todo 북마크 기능 추가 후, 북마크 여부 알려주는 기능 추가
+//        if (userPrincipal == null) {
+//            throw new RuntimeException("UserPrincipal is null");
+//        }
+        return ResponseCustom.OK(boardService.findPost(postId));
     }
 
 

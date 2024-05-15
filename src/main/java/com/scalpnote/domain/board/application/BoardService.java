@@ -4,6 +4,7 @@ import com.scalpnote.domain.board.domain.Board;
 import com.scalpnote.domain.board.domain.repository.BoardRepository;
 import com.scalpnote.domain.board.dto.CreatePostReq;
 import com.scalpnote.domain.board.dto.EditPostReq;
+import com.scalpnote.domain.board.dto.FindPostRes;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.global.DefaultAssert;
@@ -89,5 +90,11 @@ public class BoardService {
         return Message.builder()
                 .message("게시글 삭제를 완료했습니다.")
                 .build();
+    }
+
+    public FindPostRes findPost(Long postId) {
+        Board board = boardRepository.findById(postId).orElseThrow(NullPointerException::new);
+
+        return FindPostRes.toDto(board);
     }
 }
