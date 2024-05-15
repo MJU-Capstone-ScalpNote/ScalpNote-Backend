@@ -61,5 +61,21 @@ public class BoardController {
         return ResponseCustom.OK(boardService.editPost(postId, userPrincipal, editPostReq));
     }
 
+    @Operation(summary = "게시글 삭제", description = "커뮤니티 게시글을 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "400", description = "게시글 삭제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
+    @DeleteMapping("/{postId}/delete")
+    public ResponseCustom<Message> deletePost(
+            @Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+            @Parameter(description = "게시물의 id를 입력해주세요.") @PathVariable Long postId
+    ) {
+        if (userPrincipal == null) {
+            throw new RuntimeException("UserPrincipal is null");
+        }
+        return ResponseCustom.OK(boardService.deletePost(postId, userPrincipal));
+    }
+
 
 }
