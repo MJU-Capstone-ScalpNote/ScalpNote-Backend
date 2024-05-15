@@ -1,6 +1,7 @@
 package com.scalpnote.global.config.security;
 
 import com.scalpnote.global.config.security.token.CustomAuthenticationEntryPoint;
+import com.scalpnote.global.config.security.token.CustomOncePerRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public CustomOncePerRequestFilter customOncePerRequestFilter() {
+        return new CustomOncePerRequestFilter();
     }
 
     @Bean
