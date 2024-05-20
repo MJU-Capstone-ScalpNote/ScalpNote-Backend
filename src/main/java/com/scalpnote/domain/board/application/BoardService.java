@@ -5,6 +5,8 @@ import com.scalpnote.domain.board.domain.repository.BoardRepository;
 import com.scalpnote.domain.board.dto.CreatePostReq;
 import com.scalpnote.domain.board.dto.EditPostReq;
 import com.scalpnote.domain.board.dto.FindPostRes;
+import com.scalpnote.domain.comment.domain.repository.CommentRepository;
+import com.scalpnote.domain.comment.dto.CommentRes;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.global.DefaultAssert;
@@ -28,6 +30,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Message createPost(UserPrincipal userPrincipal, CreatePostReq createPostReq) {
@@ -97,11 +100,13 @@ public class BoardService {
                 .build();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public FindPostRes findPost(Long postId) {
         Board board = boardRepository.findById(postId).orElseThrow(NullPointerException::new);
 
-        return FindPostRes.toDto(board);
+        List<CommentRes> comments = commentRepository.findByBoardId(postId);
+
+        return FindPostRes.toDto(board, comments);
     }
 
     @Transactional
