@@ -22,6 +22,7 @@ public class FindPostRes {
     private LocalDateTime createdAt;
     private String writer;
     private List<CommentRes> commentResList;
+    private String imageUrl;
 
     public static FindPostRes toDto(Board board, List<CommentRes> comments) {
 
@@ -31,6 +32,7 @@ public class FindPostRes {
                 .content(board.getContent())
                 .createdAt(board.getCreatedAt())
                 .writer(board.getWriter().getName())
+                .imageUrl(board.getImageUrl())
                 .commentResList(comments)
                 .build();
     }
