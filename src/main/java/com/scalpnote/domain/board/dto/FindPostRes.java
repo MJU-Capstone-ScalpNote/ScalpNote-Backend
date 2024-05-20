@@ -1,6 +1,7 @@
 package com.scalpnote.domain.board.dto;
 
 import com.scalpnote.domain.board.domain.Board;
+import com.scalpnote.domain.comment.dto.CommentRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Builder
@@ -19,8 +21,9 @@ public class FindPostRes {
     private String content;
     private LocalDateTime createdAt;
     private String writer;
+    private List<CommentRes> commentResList;
 
-    public static FindPostRes toDto(Board board) {
+    public static FindPostRes toDto(Board board, List<CommentRes> comments) {
 
         return FindPostRes.builder()
                 .postId(board.getId())
@@ -28,6 +31,7 @@ public class FindPostRes {
                 .content(board.getContent())
                 .createdAt(board.getCreatedAt())
                 .writer(board.getWriter().getName())
+                .commentResList(comments)
                 .build();
     }
 }
