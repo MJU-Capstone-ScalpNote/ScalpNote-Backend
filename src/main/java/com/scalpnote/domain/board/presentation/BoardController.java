@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Tag(name = "Board", description = "Board API")
@@ -41,11 +42,13 @@ public class BoardController {
     @PostMapping("/new")
     public ResponseCustom<Message> createPost(
             @Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "Schemas의 createPostReq를 참고해주세요.") @Valid @RequestBody CreatePostReq createPostReq
+            @Parameter(description = "Schemas의 createPostReq를 참고해주세요.") @Valid @ModelAttribute CreatePostReq createPostReq
             ) {
         if (userPrincipal == null) {
             throw new RuntimeException("UserPrincipal is null");
         }
+        System.out.println("createPostReq.getImage() = " + createPostReq.getImage());
+        System.out.println("createPostReq = " + createPostReq.getTitle());
         return ResponseCustom.OK(boardService.createPost(userPrincipal, createPostReq));
     }
 

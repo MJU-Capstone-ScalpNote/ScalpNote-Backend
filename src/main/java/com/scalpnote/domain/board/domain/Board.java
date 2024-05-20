@@ -34,16 +34,20 @@ public class Board extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-//    @Column(name = "image_url")
-//    private String imageUrl;
+    @Column(name = "image_url")
+    private String imageUrl;
 
 
     @Builder
-    public Board(User writer, String title, String content) {
+    public Board(User writer, String title, String content, String imageUrl) {
         this.writer = writer;
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
     }
+
+
+
 
     public void updatePost(String title, String content) {
         this.title = title;

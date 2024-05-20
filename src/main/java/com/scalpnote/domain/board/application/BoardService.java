@@ -10,6 +10,7 @@ import com.scalpnote.domain.comment.dto.CommentRes;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.global.DefaultAssert;
+import com.scalpnote.global.config.s3.S3Service;
 import com.scalpnote.global.config.security.token.UserPrincipal;
 import com.scalpnote.global.payload.Message;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class BoardService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
+    private final S3Service s3Service;
+
     @Transactional
     public Message createPost(UserPrincipal userPrincipal, CreatePostReq createPostReq) {
 
@@ -46,11 +49,10 @@ public class BoardService {
                 .title(createPostReq.getTitle())
                 .content(createPostReq.getContent())
                 .writer(user2)
+                .imageUrl(s3Service.uploadImageToS3(createPostReq.getImage()))
                 .build();
 
-        System.out.println("board = " + board);
-        Board board2 = boardRepository.save(board);
-        System.out.println("Saved board ID: " + board2.getId());
+        boardRepository.save(board);
 
 
         return Message.builder()
