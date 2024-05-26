@@ -5,6 +5,7 @@ import com.scalpnote.domain.comment.dto.CommentReq;
 import com.scalpnote.domain.comment.dto.CommentRes;
 import com.scalpnote.domain.user.application.UserService;
 import com.scalpnote.domain.user.dto.HairConditionReq;
+import com.scalpnote.domain.user.dto.MypageRes;
 import com.scalpnote.global.config.security.token.CurrentUser;
 import com.scalpnote.global.config.security.token.UserPrincipal;
 import com.scalpnote.global.payload.ErrorResponse;
@@ -36,9 +37,18 @@ public class UserController {
     })
     @PostMapping("/model6")
     public ResponseCustom<Message> model6Insert(@Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-                                       @Parameter(description = "Schemas의 hairConditionReq를 참고해주세요.") @Valid @RequestBody HairConditionReq hairConditionReq) {
-        return ResponseCustom.OK(userService.model6Insert(userPrincipal, hairConditionReq ));
+                                                @Parameter(description = "Schemas의 hairConditionReq를 참고해주세요.") @Valid @RequestBody HairConditionReq hairConditionReq) {
+        return ResponseCustom.OK(userService.model6Insert(userPrincipal, hairConditionReq));
     }
 
+    @Operation(summary = "마이페이지 조회", description = "마이페이지를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "마이페이지 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MypageRes.class))}),
+            @ApiResponse(responseCode = "400", description = "마이페이지 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
+    @GetMapping("/mypage")
+    public ResponseCustom<MypageRes> findMypage(@Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
+        return ResponseCustom.OK(userService.findMypage(userPrincipal));
+    }
 
 }
