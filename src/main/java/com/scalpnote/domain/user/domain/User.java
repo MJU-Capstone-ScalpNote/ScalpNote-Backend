@@ -39,6 +39,10 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    public void updateScalpCondition(String scalpCondition) {
+        this.scalpCondition = scalpCondition;
+    }
+
     @Builder
     public User(String email, String password, String name, String hairLossType, String scalpCondition, Role role) {
         this.email = email;
