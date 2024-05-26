@@ -3,6 +3,7 @@ package com.scalpnote.domain.user.application;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.domain.user.dto.HairConditionReq;
+import com.scalpnote.domain.user.dto.MypageRes;
 import com.scalpnote.global.config.security.token.UserPrincipal;
 import com.scalpnote.global.payload.Message;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,13 @@ public class UserService {
         return Message.builder()
                 .message("두피 진단 결과가 저장되었습니다.")
                 .build();
+    }
+
+    @Transactional
+    public MypageRes findMypage(UserPrincipal userPrincipal) {
+
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(NullPointerException::new);
+
+        return MypageRes.toDto(user);
     }
 }
