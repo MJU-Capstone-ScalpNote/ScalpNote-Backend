@@ -16,7 +16,7 @@ public class TestController {
         return ResponseEntity.ok("Hello!!");
     }
 
-    @GetMapping("/test2")
+    @GetMapping("/test3")
     public ResponseCustom<?> test2() {
         return ResponseCustom.OK(new Message("a"));
     }
