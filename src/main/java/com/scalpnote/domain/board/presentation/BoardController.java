@@ -98,7 +98,7 @@ public class BoardController {
         // Todo 북마크 기능 추가 후, 북마크 여부 알려주는 기능 추가
 //        if (userPrincipal == null) {
 //            throw new RuntimeException("UserPrincipal is null");
-//        } /
+//        } //
         return ResponseCustom.OK(boardService.findPost(postId));
     }
 
