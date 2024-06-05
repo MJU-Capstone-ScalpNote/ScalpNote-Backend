@@ -1,10 +1,8 @@
 package com.scalpnote.domain.user.presentation;
 
-import com.scalpnote.domain.board.dto.CreatePostReq;
-import com.scalpnote.domain.comment.dto.CommentReq;
-import com.scalpnote.domain.comment.dto.CommentRes;
 import com.scalpnote.domain.user.application.UserService;
 import com.scalpnote.domain.user.dto.HairConditionReq;
+import com.scalpnote.domain.user.dto.Model6ResultRes;
 import com.scalpnote.domain.user.dto.MypageRes;
 import com.scalpnote.global.config.security.token.CurrentUser;
 import com.scalpnote.global.config.security.token.UserPrincipal;
@@ -20,12 +18,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "User", description = "User API")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -50,5 +52,17 @@ public class UserController {
     public ResponseCustom<MypageRes> findMypage(@Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
         return ResponseCustom.OK(userService.findMypage(userPrincipal));
     }
+
+    @Operation(summary = "model6 두피 진단 내역 조회", description = "model6 두피 내역을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "진단 내역 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Model6ResultRes.class))}),
+            @ApiResponse(responseCode = "400", description = "진단 내역 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
+    @GetMapping("/model6/history")
+    public ResponseCustom<List<Model6ResultRes>> getModel6History() {
+        List<Model6ResultRes> history = userService.getModel6History();
+        return ResponseCustom.OK(history);
+    }
+
 
 }
