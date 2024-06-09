@@ -92,14 +92,14 @@ public class BoardController {
     })
     @GetMapping("/{postId}/simple-boards")
     public ResponseCustom<FindPostRes> findPost(
-//            @Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+            @Parameter(description = "AccessToken 을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "게시물의 id를 입력해주세요.") @PathVariable Long postId
     ) {
         // Todo 북마크 기능 추가 후, 북마크 여부 알려주는 기능 추가
 //        if (userPrincipal == null) {
 //            throw new RuntimeException("UserPrincipal is null");
 //        } //
-        return ResponseCustom.OK(boardService.findPost(postId));
+        return ResponseCustom.OK(boardService.findPost(userPrincipal, postId));
     }
 
     @Operation(summary = "게시글 목록 조회", description = "커뮤니티 게시글 목록을 조회합니다.")
