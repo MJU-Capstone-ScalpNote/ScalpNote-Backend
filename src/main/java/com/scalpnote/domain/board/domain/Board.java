@@ -37,13 +37,17 @@ public class Board extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "access_scope")
+    private String accessScope;
+
 
     @Builder
-    public Board(User writer, String title, String content, String imageUrl) {
+    public Board(User writer, String title, String content, String imageUrl, String accessScope) {
         this.writer = writer;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
+        this.accessScope = accessScope;
     }
 
 

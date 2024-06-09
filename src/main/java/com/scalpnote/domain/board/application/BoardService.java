@@ -7,6 +7,7 @@ import com.scalpnote.domain.board.dto.EditPostReq;
 import com.scalpnote.domain.board.dto.FindPostRes;
 import com.scalpnote.domain.comment.domain.repository.CommentRepository;
 import com.scalpnote.domain.comment.dto.CommentRes;
+import com.scalpnote.domain.user.domain.Role;
 import com.scalpnote.domain.user.domain.User;
 import com.scalpnote.domain.user.domain.repository.UserRepository;
 import com.scalpnote.global.DefaultAssert;
@@ -50,6 +51,7 @@ public class BoardService {
                 .content(createPostReq.getContent())
                 .writer(user2)
                 .imageUrl(s3Service.uploadImageToS3(createPostReq.getImage()))
+                .accessScope(createPostReq.getAccessScope())
                 .build();
 
         boardRepository.save(board);
@@ -103,8 +105,16 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public FindPostRes findPost(Long postId) {
+    public FindPostRes findPost(UserPrincipal userPrincipal, Long postId) {
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new RuntimeException("User not found"));
         Board board = boardRepository.findById(postId).orElseThrow(NullPointerException::new);
+
+        // 게시물의 접근 범위가 ADMIN 때, 사용자가 의사인지 확인
+        // 의사 역할을 ADMIN으로 해둠
+        if (board.getAccessScope().equals("ADMIN") && !user.getRole().equals(Role.DOCTOR)) {
+            throw new RuntimeException("접근 권한이 없습니다.");
+        }
+
 
         List<CommentRes> comments = commentRepository.findByBoardId(postId);
 
@@ -122,6 +132,7 @@ public class BoardService {
                         .content(board.getContent())
                         .createdAt(board.getCreatedAt())
                         .writer(board.getWriter().getName())
+                        .accessScope(board.getAccessScope())
                         .build())
                 .collect(Collectors.toList());
 

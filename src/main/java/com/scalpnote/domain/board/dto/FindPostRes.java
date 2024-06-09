@@ -23,6 +23,7 @@ public class FindPostRes {
     private String writer;
     private List<CommentRes> commentResList;
     private String imageUrl;
+    private String accessScope;
 
     public static FindPostRes toDto(Board board, List<CommentRes> comments) {
 
@@ -34,6 +35,7 @@ public class FindPostRes {
                 .writer(board.getWriter().getName())
                 .imageUrl(board.getImageUrl())
                 .commentResList(comments)
+                .accessScope(board.getAccessScope())
                 .build();
     }
 }

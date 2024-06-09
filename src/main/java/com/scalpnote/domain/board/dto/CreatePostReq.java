@@ -27,5 +27,8 @@ public class CreatePostReq {
     @Schema(type = "string", description = "게시글에 첨부할 이미지 파일", format = "binary")
     private MultipartFile image;
 
+    @Schema(type = "string", example = "DOCTOR", description = "게시글 권한 범위 (NULL/DOCTOR)")
+    private String accessScope;
+
 
 }
